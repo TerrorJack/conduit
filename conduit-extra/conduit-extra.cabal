@@ -26,14 +26,16 @@ Library
                        Data.Conduit.Filesystem
                        Data.Conduit.Foldl
                        Data.Conduit.Lazy
-                       Data.Conduit.Network
-                       Data.Conduit.Network.UDP
                        Data.Conduit.Process
                        Data.Conduit.Process.Typed
                        Data.Conduit.Text
                        Data.Conduit.Zlib
-  if !os(windows)
+  if !os(windows) && !arch(wasm32)
       Exposed-modules: Data.Conduit.Network.Unix
+
+  if !arch(wasm32)
+      Exposed-modules: Data.Conduit.Network
+                       Data.Conduit.Network.UDP
 
   if arch(x86_64) || arch(i386)
       -- These architectures are able to perform unaligned memory accesses
@@ -50,7 +52,6 @@ Library
                      , attoparsec               >= 0.10
                      , directory
                      , filepath
-                     , network                  >= 2.3
                      , primitive                >= 0.5
                      , process
                      , resourcet                >= 1.1
@@ -58,6 +59,9 @@ Library
                      , streaming-commons        >= 0.1.16
                      , unliftio-core
                      , typed-process            >= 0.2.6
+
+  if !arch(wasm32)
+      Build-depends: network >= 2.3
 
   ghc-options:     -Wall
 
